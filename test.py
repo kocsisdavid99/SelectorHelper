@@ -14,13 +14,26 @@ options.add_argument('--log-level=3')
         
 browser = webdriver.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
 
+first_article_page = []
+
+
 browser.get('http://akuaku.pl/blog/')
 source = browser.page_source
 elements = browser.find_elements_by_css_selector('.entry-title>a')
 if not elements == []:
-    print(elements)
+    for element in elements:
+        element = element.get_attribute('href')
+        print(element)
+        while len(first_article_page) < 1:
+            first_article_page.append(element)
+        
+    browser = webdriver.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
+    browser.get(first_article_page[0])
+    print('A jelenlegi oldal:',browser.current_url)
+    print(first_article_page)
+        
 else:
-    print("csá")
+    print("nincs ilyen az oldalon")
 
 
 
