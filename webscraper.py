@@ -1,6 +1,16 @@
-from urllib.request import Request, urlopen
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 raw_url_list = open("url_list.txt", "r")
+
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--silent')
+options.add_argument('--disable-gpu')
+options.add_argument('--log-level=3')
+        
+browser = webdriver.Chrome(executable_path='./chromedriver.exe', chrome_options=options)
+
 
 statistics_0 = 0
 statistics_1 = 0
@@ -19,10 +29,9 @@ for row in raw_url_list:
     row = row.replace("', '›","")
 
     try:
-    
-        request = Request((row), headers={'User-Agent': 'Mozilla/5.0'})
-        html = urlopen(request)
-        source = html.read()
+
+        browser.get(row)
+        source = browser.page_source
         source = str(source)
         
         if "entry-title" in source:
