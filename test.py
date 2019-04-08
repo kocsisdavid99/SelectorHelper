@@ -4,18 +4,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
-
 raw_url_list = open("url_list.txt", "r")
 
 for row in raw_url_list:
     row = row.split()
     row = str(row)
     row = row.strip()
-    
-   
-    row = row.replace("['","")
-    row = row.replace("']","")
-    row = row.replace("', '›","")
+
+    row = row.replace("['", "")
+    row = row.replace("']", "")
+    row = row.replace("', '›", "")
     print(row)
 
 link_selectors = ['.entry-title>a',
@@ -24,13 +22,10 @@ link_selectors = ['.entry-title>a',
                   '.news-title>a',
                   '.post-title>a']
 
-
-
 first_article_page = []
 
+
 def request(url, find_element):
-
-
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--silent')
@@ -46,8 +41,7 @@ def request(url, find_element):
     return elements, options, current_url
 
 
-elements, options, current_url = request('http://akuaku.pl/blog/','.entry-title>a')
-
+elements, options, current_url = request('http://akuaku.pl/blog/', '.entry-title>a')
 
 if not elements == []:
     for element in elements:
@@ -56,21 +50,9 @@ if not elements == []:
         while len(first_article_page) < 1:
             first_article_page.append(element)
 
-    elements, options, current_url = request(first_article_page[0],'.entry-title>a')
-    print('A jelenlegi oldal:',current_url)
+    elements, options, current_url = request(first_article_page[0], '.entry-title>a')
+    print('A jelenlegi oldal:', current_url)
     print(first_article_page)
-        
+
 else:
     print("nincs ilyen az oldalon")
-
-
-
-
-        
-
-
-    
-
-
-
-
