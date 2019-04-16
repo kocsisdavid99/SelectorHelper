@@ -1,0 +1,5 @@
+.fn
+a[rel=author]
+.author
+.post-author
+.meta-author
