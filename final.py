@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -6,64 +7,15 @@ from selenium.webdriver.chrome.options import Options
 from itertools import cycle
 
 
-def url_list_process():
-    raw_url_list = open("url_list.txt", "r")
-    urls = []
+def get_lines_from_file(filename):
+    file = open(filename, "r")
+    result = []
 
-    for url in raw_url_list:
-        url = url.replace("\n", "")
-        urls.append(str(url))
-    url_list_length = len(urls)
+    for line in file:
+        line = line.replace("\n", "")
+        result.append(str(line))
 
-    return urls, url_list_length
-
-
-def link_selector_list_process():
-    link_selector_list = open("link_selector_list.txt", "r")
-    link_selectors = []
-
-    for link_selector in link_selector_list:
-        link_selector = link_selector.replace("\n", "")
-        link_selectors.append(str(link_selector))
-    link_selector_list_length = len(link_selectors)
-
-    return link_selectors, link_selector_list_length
-
-
-def main_page_selector_list_process():
-    main_page_selelector_list = open("main_page_selector_list.txt", "r")
-    main_page_selectors = []
-
-    for main_page_selector in main_page_selelector_list:
-        main_page_selector = main_page_selector.replace("\n", "")
-        main_page_selectors.append(str(main_page_selector))
-    main_page_selector_list_length = len(main_page_selectors)
-
-    return main_page_selectors, main_page_selector_list_length
-
-
-def date_selector_list_process():
-    date_selelector_list = open("date_selector_list.txt", "r")
-    date_selectors = []
-
-    for date_selector in date_selelector_list:
-        date_selector = date_selector.replace("\n", "")
-        date_selectors.append(str(date_selector))
-    date_selector_list_length = len(date_selectors)
-
-    return date_selectors, date_selector_list_length
-
-
-def author_selector_list_process():
-    author_selelector_list = open("author_selector_list.txt", "r")
-    author_selectors = []
-
-    for author_selector in author_selelector_list:
-        author_selector = author_selector.replace("\n", "")
-        author_selectors.append(str(author_selector))
-    author_selector_list_length = len(author_selectors)
-
-    return author_selectors, author_selector_list_length
+    return result
 
 
 def set_chrome_driver_location():
@@ -71,7 +23,7 @@ def set_chrome_driver_location():
     return chrome_driver_location
 
 
-def request(url, find_element):
+def request(url):
     try:
         options = Options()
         options.add_argument('--headless')
@@ -82,39 +34,90 @@ def request(url, find_element):
         browser = webdriver.Chrome(executable_path=set_chrome_driver_location(), chrome_options=options)
         browser.get(url)
         source = browser.page_source
-        elements = browser.find_element_by_css_selector(find_element)
-        current_url = browser.current_url
 
-        print(current_url, find_element, "JÓ!")
+        return browser
 
-        return elements, options, current_url
 
     except Exception:
-        print(url, find_element, "NEM passzol")
-        pass
+        print(url, "Az oldalt nem sikerült betölteni")
+
+
+def find_elements(browser, selector):
+    try:
+        element = browser.find_element_by_css_selector(selector)
+
+        return element
+
+    except NoSuchElementException:
+        return None
 
 
 def main():
-    first_article_page = []
-    urls, urls_length = url_list_process()
-    # print(urls_length)
-    # print(urls)
 
-    link_selectors, link_selectors_length = link_selector_list_process()
 
-    # print(link_selectors)
-    # print(link_selectors_length)
+    for url in get_lines_from_file("url_list.txt"):
+        # print("Asking url: " + url)
+        browser = request(url)
+        result_line = url
+        for link_selector in get_lines_from_file("link_selector_list.txt"):
+            # print("   Checking link selector: " + link_selector)
+            link_element = find_elements(browser, link_selector)
+            if (link_element):
 
-    for i in range(urls_length):
-        for i2 in range(link_selectors_length):
-            # print(urls[i])
-            # print(link_selectors[i2])
-            elements = request(urls[i], link_selectors[i2])
-        # if elements != 0:
-        #     print(urls[i], link_selectors[i2])
-        # else:
-        #     print("teszt 2")
-        #     # print(elements)
+                result_line += " |Link selector: " + link_selector
+
+                mainPageLink = link_element.get_attribute('href')
+
+                mainPageBrowser = request(mainPageLink)
+
+                for mainPageSelector in get_lines_from_file("main_page_selector_list.txt"):
+                    # print("      Checking main page selector: " + mainPageSelector)
+                    main_page_element = find_elements(mainPageBrowser, mainPageSelector)
+
+                    if (main_page_element):
+                        result_line += " |Main page selector: " + mainPageSelector
+
+                        break
+
+                for dateSelector in get_lines_from_file("date_selector_list.txt"):
+                    date_element = find_elements(mainPageBrowser, dateSelector)
+
+                    if (date_element):
+                        result_line += " |Date selector: " + dateSelector
+
+                        break
+
+                for authorSelector in get_lines_from_file("author_selector_list.txt"):
+                    author_element = find_elements(mainPageBrowser, authorSelector)
+
+                    if (author_element):
+                        result_line += " |Author selector: " + authorSelector
+
+                        break
+
+                #
+                # for date_selector in get_lines_from_file("date_selector_list.txt"):
+                #     find_elements()
+
+                break
+
+        print(result_line)
+
+    # link_selectors, link_selectors_length = link_selector_list_process()
+    #
+    # # print(link_selectors)
+    # # print(link_selectors_length)
+    #
+    # for i in range(urls_length):
+    #     for i2 in range(link_selectors_length):
+    #         # print(urls[i])
+    #         # print(link_selectors[i2])
+    #         elements = request(urls[i], link_selectors[i2])
+    #     # if elements != 0:
+    #     print(urls[i], link_selectors[i2])
+    # else:
+    #     print("teszt 2")
+    #     # print(elements)
 
     #
     #
