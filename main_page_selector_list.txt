@@ -1,0 +1,6 @@
+article[id~=post-\d+]
+article.post
+#content
+.article
+#main
+

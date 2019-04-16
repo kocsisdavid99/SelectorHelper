@@ -1,0 +1,5 @@
+.entry-date
+.date
+.published
+.post-meta-date
+#article-date

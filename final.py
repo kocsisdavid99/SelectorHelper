@@ -54,7 +54,7 @@ def date_selector_list_process():
     return date_selectors, date_selector_list_length
 
 
-def author_selector_list_open():
+def author_selector_list_process():
     author_selelector_list = open("author_selector_list.txt", "r")
     author_selectors = []
 
