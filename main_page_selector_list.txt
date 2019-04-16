@@ -1,4 +1,4 @@
-article[id~=post-\d+]
+article[id^='post-']
 article.post
 #content
 .article
