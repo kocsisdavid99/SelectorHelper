@@ -5,7 +5,6 @@ import SelectorStatistics
 from SelectorStatistics import SelectorStatistics
 
 
-
 def get_lines_from_file(filename):
     file = open(filename, "r")
     result = []
@@ -52,7 +51,6 @@ def find_elements(browser, selector):
 
 
 def main():
-
     LinkSelectorStatistics = SelectorStatistics()
     MainPageSelectorStatistics = SelectorStatistics()
     DateSelectorStatistics = SelectorStatistics()
@@ -106,8 +104,6 @@ def main():
 
                                 break
 
-
-
                     break
 
         print(result_line)
@@ -123,8 +119,6 @@ def main():
 
     print("Author selector statistics:")
     AuthorSelectorStatistics.print()
-
-
 
 
 if __name__ == '__main__':
