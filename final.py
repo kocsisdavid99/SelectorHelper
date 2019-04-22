@@ -51,18 +51,21 @@ def find_elements(browser, selector):
 
 
 def main():
+    global result_line
     LinkSelectorStatistics = SelectorStatistics()
     MainPageSelectorStatistics = SelectorStatistics()
     DateSelectorStatistics = SelectorStatistics()
     AuthorSelectorStatistics = SelectorStatistics()
 
-    for url in get_lines_from_file("url_list.txt"):
+    urls = get_lines_from_file("url_list.txt")
+    for url in urls:
         # print("Asking url: " + url)
         browser = request(url)
         if browser:
 
             result_line = url
-            for link_selector in get_lines_from_file("link_selector_list.txt"):
+            link_selectors = get_lines_from_file("link_selector_list.txt")
+            for link_selector in link_selectors:
                 # print("   Checking link selector: " + link_selector)
                 link_element = find_elements(browser, link_selector)
                 if (link_element):
@@ -76,7 +79,8 @@ def main():
 
                     if mainPageBrowser:
 
-                        for mainPageSelector in get_lines_from_file("main_page_selector_list.txt"):
+                        main_page_selectors = get_lines_from_file("main_page_selector_list.txt")
+                        for mainPageSelector in main_page_selectors:
                             # print("      Checking main page selector: " + mainPageSelector)
                             main_page_element = find_elements(mainPageBrowser, mainPageSelector)
 
@@ -86,7 +90,8 @@ def main():
 
                                 break
 
-                        for dateSelector in get_lines_from_file("date_selector_list.txt"):
+                        date_selectors = get_lines_from_file("date_selector_list.txt")
+                        for dateSelector in date_selectors:
                             date_element = find_elements(mainPageBrowser, dateSelector)
 
                             if (date_element):
@@ -95,7 +100,8 @@ def main():
 
                                 break
 
-                        for authorSelector in get_lines_from_file("author_selector_list.txt"):
+                        author_selectors = get_lines_from_file("author_selector_list.txt")
+                        for authorSelector in author_selectors:
                             author_element = find_elements(mainPageBrowser, authorSelector)
 
                             if (author_element):
