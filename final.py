@@ -51,7 +51,7 @@ def find_elements(browser, selector):
 
 
 def main():
-    global result_line
+
     LinkSelectorStatistics = SelectorStatistics()
     MainPageSelectorStatistics = SelectorStatistics()
     DateSelectorStatistics = SelectorStatistics()
