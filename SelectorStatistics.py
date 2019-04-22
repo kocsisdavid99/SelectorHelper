@@ -1,3 +1,8 @@
+import plotly.plotly as py
+import plotly.graph_objs as go
+import datetime
+
+
 class SelectorStatistics:
     def __init__(self):
         self._statisticsDictionary = {}
@@ -14,3 +19,37 @@ class SelectorStatistics:
         for key in self._statisticsDictionary.keys():
             hit_count = self._statisticsDictionary[key]
             print(" " + key, hit_count)
+
+    def keys_to_array(self):
+
+        keys = []
+
+        for key in self._statisticsDictionary.keys():
+            keys.append(key)
+
+        return keys
+
+    def values_to_array(self):
+
+        values = []
+
+        for value in self._statisticsDictionary.values():
+            values.append(value)
+
+        return values
+
+    def chart(self):
+        keys = []
+        values = []
+
+        for key in self._statisticsDictionary.keys():
+            keys.append(key)
+
+        for value in self._statisticsDictionary.values():
+            values.append(value)
+
+        now = datetime.datetime.now()
+
+        trace = go.Pie(labels=keys, values=values)
+
+        py.iplot([trace], filename="SelectorStatistics" + " " + str(now))

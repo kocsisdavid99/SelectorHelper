@@ -51,9 +51,8 @@ def find_elements(browser, selector):
 
 
 def main():
-
     LinkSelectorStatistics = SelectorStatistics()
-    MainPageSelectorStatistics = SelectorStatistics()
+    MainContentSelectorStatistics = SelectorStatistics()
     DateSelectorStatistics = SelectorStatistics()
     AuthorSelectorStatistics = SelectorStatistics()
 
@@ -79,14 +78,14 @@ def main():
 
                     if mainPageBrowser:
 
-                        main_page_selectors = get_lines_from_file("main_page_selector_list.txt")
-                        for mainPageSelector in main_page_selectors:
+                        main_content_selectors = get_lines_from_file("main_content_selector_list.txt")
+                        for main_content_selector in main_content_selectors:
                             # print("      Checking main page selector: " + mainPageSelector)
-                            main_page_element = find_elements(mainPageBrowser, mainPageSelector)
+                            main_content_element = find_elements(mainPageBrowser, main_content_selector)
 
-                            if (main_page_element):
-                                result_line += " |Main page selector: " + mainPageSelector
-                                MainPageSelectorStatistics.increment(mainPageSelector)
+                            if (main_content_element):
+                                result_line += " |Main content selector: " + main_content_selector
+                                MainContentSelectorStatistics.increment(main_content_selector)
 
                                 break
 
@@ -118,13 +117,18 @@ def main():
     LinkSelectorStatistics.print()
 
     print("Main page selector statistics:")
-    MainPageSelectorStatistics.print()
+    MainContentSelectorStatistics.print()
 
     print("Date selector statistics:")
     DateSelectorStatistics.print()
 
     print("Author selector statistics:")
     AuthorSelectorStatistics.print()
+
+    LinkSelectorStatistics.chart()
+    MainContentSelectorStatistics.chart()
+    DateSelectorStatistics.chart()
+    AuthorSelectorStatistics.chart()
 
 
 if __name__ == '__main__':
