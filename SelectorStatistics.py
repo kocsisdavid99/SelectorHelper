@@ -52,4 +52,4 @@ class SelectorStatistics:
 
         trace = go.Pie(labels=keys, values=values)
 
-        py.iplot([trace], filename="SelectorStatistics" + " " + str(now))
+        py.plot([trace], filename="SelectorStatistics" + " " + str(now))
