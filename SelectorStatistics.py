@@ -48,7 +48,7 @@ class SelectorStatistics:
         for value in self._statisticsDictionary.values():
             values.append(value)
 
-        now = datetime.datetime.now()
+        now = datetime.datetime.now().strftime('%Y.%m.%d-%H:%M:%S')
 
         trace = go.Pie(labels=keys, values=values)
 

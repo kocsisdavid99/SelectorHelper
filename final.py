@@ -116,7 +116,7 @@ def main():
     print("Link selector statistics:")
     LinkSelectorStatistics.print()
 
-    print("Main page selector statistics:")
+    print("Main content selector statistics:")
     MainContentSelectorStatistics.print()
 
     print("Date selector statistics:")
