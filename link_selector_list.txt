@@ -3,3 +3,4 @@ a.post-title
 a.title
 .news-title>a
 .post-title>a
+.title>a

@@ -3,3 +3,4 @@
 .published
 .post-meta-date
 #article-date
+.meta_date
